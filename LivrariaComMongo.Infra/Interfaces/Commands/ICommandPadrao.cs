@@ -1,4 +1,4 @@
-﻿namespace LivrariaComLog.Infra.Interfaces.Commands
+﻿namespace LivrariaComMongo.Infra.Interfaces.Commands
 {
     public interface ICommandPadrao
     {

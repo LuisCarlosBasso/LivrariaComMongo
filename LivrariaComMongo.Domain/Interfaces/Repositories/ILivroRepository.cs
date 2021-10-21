@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using LivrariaComLog.Domain.Entidades;
-using LivrariaComLog.Domain.QueryResults;
+using LivrariaComMongo.Domain.Entidades;
+using LivrariaComMongo.Domain.QueryResults;
 
-namespace LivrariaComLog.Domain.Interfaces.Repositories
+namespace LivrariaComMongo.Domain.Interfaces.Repositories
 {
     public interface ILivroRepository
     {
-        long Inserir(Livro livro);
+        Livro Inserir(Livro livro);
         void Atualizar(Livro livro);
-        void Excluir(long id);
-        List<LivroQueryResult> Listar();
-        LivroQueryResult Obter(long id);
-        bool CheckId(long id);
+        void Excluir(string id);
+        List<Livro> Listar();
+        Livro Obter(string id);
+        bool CheckId(string id);
     }
 }

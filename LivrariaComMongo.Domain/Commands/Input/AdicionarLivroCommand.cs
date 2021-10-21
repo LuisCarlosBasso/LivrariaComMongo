@@ -1,7 +1,7 @@
 ﻿using Flunt.Notifications;
-using LivrariaComLog.Infra.Interfaces.Commands;
+using LivrariaComMongo.Infra.Interfaces.Commands;
 
-namespace LivrariaComLog.Domain.Commands.Input
+namespace LivrariaComMongo.Domain.Commands.Input
 {
     public class AdicionarLivroCommand : Notifiable, ICommandPadrao
     {

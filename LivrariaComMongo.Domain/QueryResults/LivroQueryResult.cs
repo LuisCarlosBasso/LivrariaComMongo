@@ -1,4 +1,4 @@
-﻿namespace LivrariaComLog.Domain.QueryResults
+﻿namespace LivrariaComMongo.Domain.QueryResults
 {
     public class LivroQueryResult
     {

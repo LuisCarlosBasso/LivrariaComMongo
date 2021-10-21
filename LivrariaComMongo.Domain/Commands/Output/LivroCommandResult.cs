@@ -1,6 +1,6 @@
-﻿using LivrariaComLog.Infra.Interfaces.Commands;
+﻿using LivrariaComMongo.Infra.Interfaces.Commands;
 
-namespace LivrariaComLog.Domain.Commands.Output
+namespace LivrariaComMongo.Domain.Commands.Output
 {
     public class LivroCommandResult : ICommandResult
     {

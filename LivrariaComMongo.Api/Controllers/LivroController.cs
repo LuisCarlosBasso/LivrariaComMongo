@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using LivrariaComLog.Domain.Commands.Input;
-using LivrariaComLog.Domain.Handlers;
-using LivrariaComLog.Domain.Interfaces.Repositories;
-using LivrariaComLog.Domain.QueryResults;
-using LivrariaComLog.Infra.Interfaces.Commands;
+﻿using System.Collections.Generic;
+using LivrariaComMongo.Domain.Commands.Input;
+using LivrariaComMongo.Domain.Entidades;
+using LivrariaComMongo.Domain.Handlers;
+using LivrariaComMongo.Domain.Interfaces.Repositories;
+using LivrariaComMongo.Infra.Interfaces.Commands;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LivrariaComLog.Controllers
+namespace LivrariaComMongo.Controllers
 {
     [Consumes("application/json")]
     [Produces("application/json")]
@@ -33,7 +32,7 @@ namespace LivrariaComLog.Controllers
         
         [HttpPut]
         [Route("livros/{id}")]
-        public ICommandResult AtualizarLivro(long id, [FromBody] AtualizarLivroCommand command)
+        public ICommandResult AtualizarLivro(string id, [FromBody] AtualizarLivroCommand command)
         {
             command.Id = id;
             return _handler.Handle(command);
@@ -41,21 +40,21 @@ namespace LivrariaComLog.Controllers
         
         [HttpDelete]
         [Route("livros/{id}")]
-        public ICommandResult ExcluirLivro(long id)
+        public ICommandResult ExcluirLivro(string id)
         {
             return _handler.Handle(new ExcluirLivroCommand() {Id = id});
         }   
         
         [HttpGet]
         [Route("livros")]
-        public List<LivroQueryResult> ListarLivros()
+        public List<Livro> ListarLivros()
         {
             return _repository.Listar();
         }       
         
         [HttpGet]
         [Route("livro/{id}")]
-        public LivroQueryResult ObterLivro(long id)
+        public Livro ObterLivro(string id)
         {
             return _repository.Obter(id);
         }

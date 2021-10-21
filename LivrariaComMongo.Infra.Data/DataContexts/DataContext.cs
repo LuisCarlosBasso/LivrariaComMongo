@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Data;
-using LivrariaComLog.Infra.Settings;
-using MySql.Data.MySqlClient;
+using LivrariaComMongo.Domain.Entidades;
+using LivrariaComMongo.Infra.Settings;
+using MongoDB.Driver;
 
-namespace LivrariaComLog.Infra.Data.DataContexts
+namespace LivrariaComMongo.Infra.Data.DataContexts
 {
-    public class DataContext : IDisposable
+    public class DataContext
     {
-        public MySqlConnection MySqlConnection { get; set; }
-
+        public IMongoCollection<Livro> Livros { get; set; }
+        
         public DataContext(AppSettings appSettings)
         {
-            MySqlConnection = new MySqlConnection(appSettings.ConnectionString);
-            MySqlConnection.Open();
-        }
-
-
-        public void Dispose()
-        {
-            if (MySqlConnection.State != ConnectionState.Closed)
-                MySqlConnection.Close();
+            var client = new MongoClient(appSettings.ConnectionString);
+            var database = client.GetDatabase(appSettings.DatabaseName);
+            Livros = database.GetCollection<Livro>(appSettings.CollectionName);
         }
     }
 }

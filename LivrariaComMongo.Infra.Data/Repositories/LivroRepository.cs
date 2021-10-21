@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Dapper;
-using LivrariaComLog.Domain.Entidades;
-using LivrariaComLog.Domain.Interfaces.Repositories;
-using LivrariaComLog.Domain.QueryResults;
-using LivrariaComLog.Infra.Data.DataContexts;
-using LivrariaComLog.Infra.Data.Repositories.Queries;
+using MongoDB.Driver;
+using LivrariaComMongo.Domain.Entidades;
+using LivrariaComMongo.Domain.Interfaces.Repositories;
+using LivrariaComMongo.Domain.QueryResults;
+using LivrariaComMongo.Infra.Data.DataContexts;
 
-namespace LivrariaComLog.Infra.Data.Repositories
+namespace LivrariaComMongo.Infra.Data.Repositories
 {
     public class LivroRepository : ILivroRepository
     {
-        private readonly DynamicParameters _parameters = new();
         private readonly DataContext _dataContext;
 
         public LivroRepository(DataContext dataContext)
@@ -21,56 +19,35 @@ namespace LivrariaComLog.Infra.Data.Repositories
             _dataContext = dataContext;
         }
 
-        public long Inserir(Livro livro)
+        public Livro Inserir(Livro livro)
         {
-            _parameters.Add("Nome", livro.Nome, DbType.String);
-            _parameters.Add("Autor", livro.Autor, DbType.String);
-            _parameters.Add("Edicao", livro.Edicao, DbType.Int32);
-            _parameters.Add("Isbn", livro.Isbn, DbType.String);
-            _parameters.Add("Imagem", livro.Imagem, DbType.String);
-
-            return _dataContext.MySqlConnection.ExecuteScalar<long>(LivroQueries.Inserir, _parameters);
+            _dataContext.Livros.InsertOne(livro);
+            return livro;
         }
 
         public void Atualizar(Livro livro)
         {
-            _parameters.Add("Id", livro.Id, DbType.Int64);
-            _parameters.Add("Nome", livro.Nome, DbType.String);
-            _parameters.Add("Autor", livro.Autor, DbType.String);
-            _parameters.Add("Edicao", livro.Edicao, DbType.Int32);
-            _parameters.Add("Isbn", livro.Isbn, DbType.String);
-            _parameters.Add("Imagem", livro.Imagem, DbType.String);
-
-            _dataContext.MySqlConnection.Execute(LivroQueries.Atualizar, _parameters);
+            _dataContext.Livros.ReplaceOne(book => book.Id == livro.Id, livro);
         }
 
-        public void Excluir(long id)
+        public void Excluir(string id)
         {
-            _parameters.Add("Id", id, DbType.Int64);
-
-            _dataContext.MySqlConnection.Execute(LivroQueries.Excluir, _parameters);
+            _dataContext.Livros.DeleteOne(book => book.Id == id);
         }
 
-        public List<LivroQueryResult> Listar()
+        public List<Livro> Listar()
         {
-            var livros = _dataContext.MySqlConnection.Query<LivroQueryResult>(LivroQueries.Listar).ToList();
-            return livros;
+            return _dataContext.Livros.Find(book => true).ToList();
         }
 
-        public LivroQueryResult Obter(long id)
+        public Livro Obter(string id)
         {
-            _parameters.Add("Id", id, DbType.Int64);
-
-            var livro = _dataContext.MySqlConnection.Query<LivroQueryResult>(LivroQueries.Obter, _parameters)
-                .FirstOrDefault();
-            return livro;
+            return _dataContext.Livros.Find(book => book.Id == id).FirstOrDefault();
         }
 
-        public bool CheckId(long id)
+        public bool CheckId(string id)
         {
-            _parameters.Add("Id", id, DbType.Int64);
-
-            return _dataContext.MySqlConnection.Query<bool>(LivroQueries.CheckId, _parameters).FirstOrDefault();
+            return _dataContext.Livros.Find(book => book.Id == id).Any();
         }
     }
 }

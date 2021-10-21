@@ -1,11 +1,11 @@
 ﻿using System;
-using LivrariaComLog.Domain.Commands.Input;
-using LivrariaComLog.Domain.Commands.Output;
-using LivrariaComLog.Domain.Entidades;
-using LivrariaComLog.Domain.Interfaces.Repositories;
-using LivrariaComLog.Infra.Interfaces.Commands;
+using LivrariaComMongo.Domain.Commands.Input;
+using LivrariaComMongo.Domain.Commands.Output;
+using LivrariaComMongo.Domain.Entidades;
+using LivrariaComMongo.Domain.Interfaces.Repositories;
+using LivrariaComMongo.Infra.Interfaces.Commands;
 
-namespace LivrariaComLog.Domain.Handlers
+namespace LivrariaComMongo.Domain.Handlers
 {
     public class LivroHandler : ICommandHandler<AdicionarLivroCommand>, ICommandHandler<AtualizarLivroCommand>,
         ICommandHandler<ExcluirLivroCommand>
@@ -23,11 +23,9 @@ namespace LivrariaComLog.Domain.Handlers
                 return new LivroCommandResult(false, "Por favor corrija as inconsistências abaixo",
                     command.Notifications);
 
-            long id = 0;
+            Livro livro = new Livro(command.Nome, command.Autor, command.Edicao, command.Isbn, command.Imagem);
 
-            Livro livro = new Livro(id, command.Nome, command.Autor, command.Edicao, command.Isbn, command.Imagem);
-
-            id = _repository.Inserir(livro);
+            _repository.Inserir(livro);
 
             var retorno = new LivroCommandResult(true, "Livro adicionado com sucesso!", livro);
 
@@ -43,7 +41,7 @@ namespace LivrariaComLog.Domain.Handlers
             if (!_repository.CheckId(command.Id))
                 return new LivroCommandResult(false, "Este livro não existe.", new { });
 
-            long id = command.Id;
+            string id = command.Id;
             
             Livro livro =
                 new Livro(id, command.Nome, command.Autor, command.Edicao, command.Isbn, command.Imagem);
@@ -60,7 +58,7 @@ namespace LivrariaComLog.Domain.Handlers
             if (!_repository.CheckId(command.Id))
                 return new LivroCommandResult(false, "Este livro não existe.", new { });
 
-            long id = command.Id;
+            string id = command.Id;
             _repository.Excluir(id);
             return new LivroCommandResult(true, "Livro excluido com sucesso", new { });
         }

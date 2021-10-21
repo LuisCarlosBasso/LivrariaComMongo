@@ -1,13 +1,13 @@
 ﻿using System.Text.Json.Serialization;
 using Flunt.Notifications;
-using LivrariaComLog.Infra.Interfaces.Commands;
+using LivrariaComMongo.Infra.Interfaces.Commands;
 
-namespace LivrariaComLog.Domain.Commands.Input
+namespace LivrariaComMongo.Domain.Commands.Input
 {
     public class AtualizarLivroCommand : Notifiable, ICommandPadrao
     {
         [JsonIgnore]
-        public long Id { get; set; }
+        public string Id { get; set; }
         public string Nome { get; set; }
         public string Autor { get; set; }
         public int Edicao { get; set; }
@@ -18,8 +18,6 @@ namespace LivrariaComLog.Domain.Commands.Input
         {
             if (string.IsNullOrWhiteSpace(Id.ToString()))
                 AddNotification("Id", "ID é um campo obrigatório");
-            if (Id < 0)
-                AddNotification("Id", "ID deve ser maior que zero");
 
             if (string.IsNullOrWhiteSpace(Nome))
                 AddNotification("Nome", "Nome é um campo obrigatório");

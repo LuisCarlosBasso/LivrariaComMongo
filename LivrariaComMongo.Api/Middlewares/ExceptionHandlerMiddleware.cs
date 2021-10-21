@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace LivrariaComLog.Middlewares
+namespace LivrariaComMongo.Middlewares
 {
     public class ExceptionHandlerMiddleware
     {
